@@ -164,7 +164,7 @@ class BaseClient:
         params: typing.Optional[QueryParamTypes] = None,
         headers: typing.Optional[HeaderTypes] = None,
         cookies: typing.Optional[CookieTypes] = None,
-        persistent_cookies: bool = False,
+        persistent_cookies: bool = True,
         timeout: TimeoutTypes = DEFAULT_TIMEOUT_CONFIG,
         follow_redirects: bool = False,
         max_redirects: int = DEFAULT_MAX_REDIRECTS,
@@ -469,6 +469,7 @@ class BaseClient:
         headers = self._redirect_headers(request, url, method)
         stream = self._redirect_stream(request, method)
         cookies = Cookies(self.cookies)
+        cookies.extract_cookies(response)
         return Request(
             method=method,
             url=url,
@@ -630,7 +631,7 @@ class Client(BaseClient):
         params: typing.Optional[QueryParamTypes] = None,
         headers: typing.Optional[HeaderTypes] = None,
         cookies: typing.Optional[CookieTypes] = None,
-        persistent_cookies: bool = False,
+        persistent_cookies: bool = True,
         verify: VerifyTypes = True,
         cert: typing.Optional[CertTypes] = None,
         http1: bool = True,
@@ -1375,7 +1376,7 @@ class AsyncClient(BaseClient):
         params: typing.Optional[QueryParamTypes] = None,
         headers: typing.Optional[HeaderTypes] = None,
         cookies: typing.Optional[CookieTypes] = None,
-        persistent_cookies: bool = False,
+        persistent_cookies: bool = True,
         verify: VerifyTypes = True,
         cert: typing.Optional[CertTypes] = None,
         http1: bool = True,
