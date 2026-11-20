@@ -209,7 +209,11 @@ class BaseClient:
         return url.copy_with(raw_path=url.raw_path + b"/")
 
     def _get_proxy_map(
-        self, proxies: typing.Optional[ProxiesTypes], allow_env_proxies: bool
+        self,
+        proxies: typing.Optional[ProxiesTypes],
+        allow_env_proxies: bool,
+        verify: bool = True,
+        cert: typing.Optional[str] = None,
     ) -> typing.Dict[str, typing.Optional[Proxy]]:
         if proxies is None:
             if allow_env_proxies:
@@ -442,6 +446,8 @@ class BaseClient:
         self,
         request: Request,
         auth: typing.Union[AuthTypes, UseClientDefault, None] = USE_CLIENT_DEFAULT,
+        verify: bool = True,
+        cert: typing.Optional[str] = None,
     ) -> Auth:
         auth = (
             self._auth if isinstance(auth, UseClientDefault) else self._build_auth(auth)
@@ -498,7 +504,13 @@ class BaseClient:
 
         return method
 
-    def _redirect_url(self, request: Request, response: Response) -> URL:
+    def _redirect_url(
+        self,
+        request: Request,
+        response: Response,
+        verify: bool = True,
+        cert: typing.Optional[str] = None,
+    ) -> URL:
         """
         Return the URL for the redirect to follow.
         """
@@ -1770,6 +1782,8 @@ class AsyncClient(BaseClient):
         follow_redirects: typing.Union[bool, UseClientDefault] = USE_CLIENT_DEFAULT,
         timeout: typing.Union[TimeoutTypes, UseClientDefault] = USE_CLIENT_DEFAULT,
         extensions: typing.Optional[RequestExtensions] = None,
+        verify: bool = True,
+        cert: typing.Optional[str] = None,
     ) -> Response:
         """
         Send an `OPTIONS` request.
@@ -1786,6 +1800,8 @@ class AsyncClient(BaseClient):
             follow_redirects=follow_redirects,
             timeout=timeout,
             extensions=extensions,
+            verify=verify,
+            cert=cert,
         )
 
     async def head(
