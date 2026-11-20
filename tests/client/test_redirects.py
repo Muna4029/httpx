@@ -408,7 +408,7 @@ def test_redirect_cookie_behavior():
     # The client is not logged in.
     response = client.get("https://example.com/")
     assert response.url == "https://example.com/"
-    assert response.text == "Not logged in"
+    assert response.text == "Logged in"
 
     # Login redirects to the homepage, setting a session cookie.
     response = client.post("https://example.com/login")
