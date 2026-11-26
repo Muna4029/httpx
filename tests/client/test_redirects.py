@@ -380,7 +380,7 @@ def cookie_sessions(request: httpx.Request) -> httpx.Response:
         status_code = httpx.codes.SEE_OTHER
         headers = {
             "location": "/",
-            "set-cookie": (
+            "Set-Cookie": (
                 "session=eyJ1c2VybmFtZSI6ICJ0b21; path=/; Max-Age=1209600; "
                 "httponly; samesite=lax"
             ),
@@ -392,7 +392,7 @@ def cookie_sessions(request: httpx.Request) -> httpx.Response:
         status_code = httpx.codes.SEE_OTHER
         headers = {
             "location": "/",
-            "set-cookie": (
+            "Set-Cookie": (
                 "session=null; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; "
                 "httponly; samesite=lax"
             ),

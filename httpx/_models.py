@@ -1149,10 +1149,13 @@ class Cookies(typing.MutableMapping[str, str]):
         return self.set(name, value)
 
     def __getitem__(self, name: str) -> str:
-        value = self.get(name)
-        if value is None:
-            raise KeyError(name)
-        return value
+        # Return the value of the first matching cookie with the given name.
+        # Iterate the underlying jar directly to avoid ambiguity between
+        # a missing cookie and a cookie with a None value returned by get().
+        for cookie in self.jar:
+            if cookie.name == name:
+                return cookie.value
+        raise KeyError(name)
 
     def __delitem__(self, name: str) -> None:
         return self.delete(name)

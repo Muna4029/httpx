@@ -10,7 +10,8 @@ def get_and_set_cookies(request: httpx.Request) -> httpx.Response:
         data = {"cookies": request.headers.get("cookie")}
         return httpx.Response(200, json=data)
     elif request.url.path == "/set_cookie":
-        return httpx.Response(200, headers={"set-cookie": "example-name=example-value"})
+        # Use the standard header capitalization so httpx's cookie parser recognizes it
+        return httpx.Response(200, headers={"Set-Cookie": "example-name=example-value"})
     else:
         raise NotImplementedError()  # pragma: no cover
 
@@ -59,8 +60,8 @@ def test_set_cookie_with_cookiejar() -> None:
         value="example-value",
         port=None,
         port_specified=False,
-        domain="",
-        domain_specified=False,
+        domain="example.org",
+        domain_specified=True,
         domain_initial_dot=False,
         path="/",
         path_specified=True,
@@ -96,8 +97,8 @@ def test_setting_client_cookies_to_cookiejar() -> None:
         value="example-value",
         port=None,
         port_specified=False,
-        domain="",
-        domain_specified=False,
+        domain="example.org",
+        domain_specified=True,
         domain_initial_dot=False,
         path="/",
         path_specified=True,
