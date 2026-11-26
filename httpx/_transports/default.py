@@ -23,6 +23,7 @@ client = httpx.Client(transport=transport)
 transport = httpx.HTTPTransport(uds="socket.uds")
 client = httpx.Client(transport=transport)
 """
+
 import contextlib
 import ssl
 import typing
@@ -121,6 +122,7 @@ class HTTPTransport(BaseTransport):
     def __init__(
         self,
         ssl_context: typing.Optional[ssl.SSLContext] = None,
+        cert: typing.Optional[CertTypes] = None,
         http1: bool = True,
         http2: bool = False,
         limits: Limits = DEFAULT_LIMITS,
@@ -145,6 +147,7 @@ class HTTPTransport(BaseTransport):
                 local_address=local_address,
                 retries=retries,
                 socket_options=socket_options,
+                cert=cert,
             )
         elif proxy.url.scheme in ("http", "https"):
             self._pool = httpcore.HTTPProxy(
@@ -164,6 +167,7 @@ class HTTPTransport(BaseTransport):
                 http1=http1,
                 http2=http2,
                 socket_options=socket_options,
+                cert=cert,
             )
         elif proxy.url.scheme == "socks5":
             try:
@@ -188,6 +192,7 @@ class HTTPTransport(BaseTransport):
                 keepalive_expiry=limits.keepalive_expiry,
                 http1=http1,
                 http2=http2,
+                cert=cert,
             )
         else:  # pragma: no cover
             raise ValueError(
@@ -260,6 +265,7 @@ class AsyncHTTPTransport(AsyncBaseTransport):
     def __init__(
         self,
         ssl_context: typing.Optional[ssl.SSLContext] = None,
+        cert: typing.Optional[CertTypes] = None,
         http1: bool = True,
         http2: bool = False,
         limits: Limits = DEFAULT_LIMITS,
@@ -284,6 +290,7 @@ class AsyncHTTPTransport(AsyncBaseTransport):
                 local_address=local_address,
                 retries=retries,
                 socket_options=socket_options,
+                cert=cert,
             )
         elif proxy.url.scheme in ("http", "https"):
             self._pool = httpcore.AsyncHTTPProxy(
@@ -302,6 +309,7 @@ class AsyncHTTPTransport(AsyncBaseTransport):
                 http1=http1,
                 http2=http2,
                 socket_options=socket_options,
+                cert=cert,
             )
         elif proxy.url.scheme == "socks5":
             try:
@@ -326,6 +334,7 @@ class AsyncHTTPTransport(AsyncBaseTransport):
                 keepalive_expiry=limits.keepalive_expiry,
                 http1=http1,
                 http2=http2,
+                cert=cert,
             )
         else:  # pragma: no cover
             raise ValueError(
